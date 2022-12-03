@@ -1,7 +1,7 @@
 import "../common/style/index.css";
 import Navbar from "../common/components/NavBar";
 import { db } from "../common/firebase";
-import { setDoc, doc, getDocs , collection } from "firebase/firestore";
+import { setDoc, doc, deleteDoc, getDocs , collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -30,6 +30,25 @@ function App() {
       console.log(e);
     }
   }
+
+  const deleteUser = async (userID) => {
+    try {
+      const userRef = doc(db, "users", userID);
+      await deleteDoc(userRef)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const handleDeleteUser = async (userRef) => {
+    try {
+      await deleteUser(userRef);
+      setUsers(await getUsers());
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     (async() => setUsers(await getUsers()))()
   }, [])
